@@ -168,13 +168,13 @@ public class Login extends JFrame {
 		txtContrasena.setBounds(65, 353, 324, 32);
 		panel.add(txtContrasena);
 		
-		JLabel LabelUsuario = new JLabel("USUARIO");
+		JLabel LabelUsuario = new JLabel("USUARIO:");
 		LabelUsuario.setForeground(SystemColor.textInactiveText);
 		LabelUsuario.setFont(new Font("Roboto Black", Font.PLAIN, 20));
 		LabelUsuario.setBounds(65, 219, 107, 26);
 		panel.add(LabelUsuario);
 		
-		JLabel lblContrasea = new JLabel("CONTRASEÑA");
+		JLabel lblContrasea = new JLabel("CONTRASEÑA:");
 		lblContrasea.setForeground(SystemColor.textInactiveText);
 		lblContrasea.setFont(new Font("Roboto Black", Font.PLAIN, 20));
 		lblContrasea.setBounds(65, 316, 140, 26);
@@ -246,7 +246,11 @@ public class Login extends JFrame {
 	            menu.setVisible(true);
 	            dispose();	 
 	        }else {
-	            JOptionPane.showMessageDialog(this, "Usuario o Contraseña no válidos");
+	            //JOptionPane.showMessageDialog(this, "Usuario o Contraseña no válidos");
+				ErrorLogin foo = new ErrorLogin();
+				foo.setVisible(true);
+				dispose();
+				
 	        }
 	} 
 

@@ -12,12 +12,14 @@ import javax.swing.ImageIcon;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import java.awt.SystemColor;
 import java.awt.Toolkit;
 
 @SuppressWarnings("serial")
-public class Exito extends JDialog {
+public class Salir extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 
@@ -26,7 +28,7 @@ public class Exito extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			Exito dialog = new Exito();
+			Salir dialog = new Salir();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -37,8 +39,8 @@ public class Exito extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public Exito() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(Exito.class.getResource("/imagenes/aH-40px.png")));
+	public Salir() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Salir.class.getResource("/imagenes/aH-40px.png")));
 		setBounds(100, 100, 394, 226);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBackground(SystemColor.control);
@@ -48,12 +50,12 @@ public class Exito extends JDialog {
 		contentPanel.setLayout(null);
 		{
 			JLabel lblNewLabel = new JLabel("");
-			lblNewLabel.setIcon(new ImageIcon(Exito.class.getResource("/imagenes/Ha-100px.png")));
+			lblNewLabel.setIcon(new ImageIcon(Salir.class.getResource("/imagenes/Ha-100px.png")));
 			lblNewLabel.setBounds(123, 11, 100, 100);
 			contentPanel.add(lblNewLabel);
 		}
 		{
-			JLabel lblNewLabel_1 = new JLabel("Datos guardados satisfactoriamente");
+			JLabel lblNewLabel_1 = new JLabel("¿Realmente quieres Salir?");
 			lblNewLabel_1.setForeground(new Color (12, 138, 199));
 			lblNewLabel_1.setFont(new Font("Arial", Font.BOLD, 18));
 			lblNewLabel_1.setBounds(27, 122, 322, 21);
@@ -68,8 +70,7 @@ public class Exito extends JDialog {
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						dispose();                  //sirve para cerrar la ventana actual
-						MenuUsuario usuario = new MenuUsuario(); 
-						usuario.setVisible(true);
+						System.exit(0);
 					}
 				});
 				okButton.setActionCommand("OK");
@@ -78,8 +79,20 @@ public class Exito extends JDialog {
 			}
 			{
 				JButton cancelButton = new JButton("Cancel");
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
+				 cancelButton.setActionCommand("Cancel");
+				 buttonPane.add(cancelButton);
+
+				 cancelButton.addMouseListener(new MouseAdapter() {
+
+					@Override
+					public void mouseClicked(MouseEvent e) {
+					MenuPrincipal principal = new MenuPrincipal();
+					principal.setVisible(true);
+					dispose();
+					}
+
+				 });
+		
 			}
 		}
 	}

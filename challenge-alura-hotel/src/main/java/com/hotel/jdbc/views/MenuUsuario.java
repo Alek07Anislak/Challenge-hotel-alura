@@ -158,7 +158,10 @@ public class MenuUsuario extends JFrame {  //SISTEMA DE RESERVAS HOTEL ALURA (lu
 		btnexit.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				System.exit(0);
+				Login login = new Login();
+				login.setVisible(true);
+				dispose(); // la clase dispose() se utiliza para liberar los recursos de sistema asociados con una ventana y cerrarla de forma segura.
+				//System.exit(0);
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
