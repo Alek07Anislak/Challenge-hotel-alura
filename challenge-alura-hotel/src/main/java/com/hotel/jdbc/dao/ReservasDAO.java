@@ -3,6 +3,7 @@ package com.hotel.jdbc.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.hotel.jdbc.modelo.Reservas;
@@ -16,6 +17,8 @@ public class ReservasDAO {
 
 
     public List<Reservas> listar() {
+
+        List<Reservas> resultado = new ArrayList<Reservas>();
         
         try {
             
@@ -34,17 +37,18 @@ public class ReservasDAO {
                                                   rs.getDate("FECHASALIDA"),
                                                   rs.getDouble("VALOR"),
                                                   rs.getString("FORMAPAGO"));
+                        resultado.add(reservas);                          
 
                     }
                     
-                    
-
-                 }
+                }
+            }    
 
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
+            return resultado;
         }
     }    
 
-}
+
