@@ -8,11 +8,11 @@ public class Huespedes {
     private String apellido;
     private Date fechaNacimiento;
     private String nacionalidad;
-    private Integer celular;
+    private String celular;
     private Integer idReserva;
 
   
-    public Huespedes(String nombre, String apellido, Date fechaNacimiento, String nacionalidad, Integer celular) {
+    public Huespedes(String nombre, String apellido, Date fechaNacimiento, String nacionalidad, String celular) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.fechaNacimiento = fechaNacimiento;
@@ -20,14 +20,14 @@ public class Huespedes {
         this.celular = celular;
     }
 
-    public Huespedes(Integer id, String nombre, String apellido, Date fechaNacimiento, String nacionalidad,
-    Integer celular) {
+    public Huespedes(Integer id, String nombre, String apellido, Date fechaNacimiento, String nacionalidad,String celular, Integer idReserva) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
         this.fechaNacimiento = fechaNacimiento;
         this.nacionalidad = nacionalidad;
         this.celular = celular;
+        this.idReserva=idReserva;
     }
 
     public Integer getId() {
@@ -50,7 +50,7 @@ public class Huespedes {
         return nacionalidad;
     }
 
-    public Integer getCelular() {
+    public String getCelular() {
         return celular;
     }
 
@@ -58,11 +58,11 @@ public class Huespedes {
         this.id = id;
     }
 
-    public Integer getCategoriaId() {
+    public Integer getIdReservas() {
         return this.idReserva;
     }
 
-    public void setCategoriaId(Integer idReserva) {
+    public void setIdReservas(Integer idReserva) {
         this.idReserva = idReserva;
     }
 

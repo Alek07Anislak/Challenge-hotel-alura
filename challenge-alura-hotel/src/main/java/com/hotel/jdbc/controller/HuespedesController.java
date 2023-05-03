@@ -31,12 +31,15 @@ public class HuespedesController {//REALIZA LA CONEXIÓN ENTRE LA VIEW Y LA FUEN
     /**
      * GUARDAR***************************************************************************************************************** 
      */
-    public void guardar(Huespedes huespedes, Integer idReservas) {
-        huespedes.setCategoriaId(idReservas);
-        huespedesDAO.guardar(huespedes);
+    public void guardar(Huespedes huespedes , Integer idReservas) {
+         huespedes.setIdReservas(idReservas);
+         huespedesDAO.guardar(huespedes);
     }
 
-    public List<Huespedes> listar() {
+    /**
+     * LISTAR*****************************************************************************************************************
+     */
+    public List<Huespedes> listar() { //BUSCAR
         return huespedesDAO.listar();
     }
 }

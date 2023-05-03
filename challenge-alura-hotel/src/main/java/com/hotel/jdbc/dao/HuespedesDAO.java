@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.hotel.jdbc.modelo.Huespedes;
-import com.hotel.jdbc.factory.ConnectionFactory;
+
 
 
 
@@ -20,7 +20,9 @@ public class HuespedesDAO {
 
     public HuespedesDAO(Connection con) {
         this.con = con;
+        //this.con= new ConnectionFactory().recuperaConexion();
     }
+  
 
 
 /**
@@ -72,7 +74,7 @@ public int eliminar(Integer id) {
  */
 public void guardar(Huespedes huespedes) {
     try(con) {
-        final PreparedStatement stmt = con.prepareStatement("INSERT INTO huespedes(NOMBRE,APELLIDO,FECHANACIMIENTO,NACIONALIDAD,CELULAR,IDRESERVA"+
+        final PreparedStatement stmt = con.prepareStatement("INSERT INTO huespedes(NOMBRE,APELLIDO,FECHA_DE_NACIMIENTO,NACIONALIDAD,CELULAR,ID_RESERVA) "+
                                                                 "VALUES(?,?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
                 try(stmt) {
                         
@@ -91,8 +93,8 @@ private void ejecutarRegistro(Huespedes huespedes, PreparedStatement stmt) throw
     stmt.setString(2,huespedes.getApellido());
     stmt.setDate(3,huespedes.getFechaNacimiento());
     stmt.setString(4,huespedes.getNacionalidad());
-    stmt.setInt(5,huespedes.getCelular());
-    stmt.setInt(6,huespedes.getCategoriaId());
+    stmt.setString(5,huespedes.getCelular());
+    stmt.setInt(6,huespedes.getIdReservas());
 
     stmt.execute();
 
@@ -114,7 +116,7 @@ public List<Huespedes> listar() {
     List<Huespedes> resultadoLista = new ArrayList<>();
 
     try(con) {
-        final PreparedStatement stmt = con.prepareStatement("SELECT * FROM HUESPEDES");
+        final PreparedStatement stmt = con.prepareStatement("SELECT * FROM huespedes");
 
         try(stmt) {
             stmt.execute();
@@ -125,9 +127,10 @@ public List<Huespedes> listar() {
                     Huespedes fila = new Huespedes(rs.getInt("ID"),
                                                    rs.getString("NOMBRE"),
                                                    rs.getString("APELLIDO"),
-                                                   rs.getDate("FECHANACIMIENTO"),
+                                                   rs.getDate("FECHA_DE_NACIMIENTO"),
                                                    rs.getString("NACIONALIDAD"),
-                                                   rs.getInt("CELULAR"));
+                                                   rs.getString("CELULAR"),
+                                                   rs.getInt("ID_RESERVA"));
                     resultadoLista.add(fila);
                 }
 

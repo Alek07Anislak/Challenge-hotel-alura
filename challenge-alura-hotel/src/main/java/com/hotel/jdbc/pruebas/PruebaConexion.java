@@ -8,10 +8,10 @@ public class PruebaConexion {
     
     public static void main(String[] args) throws SQLException  {
         Connection con = DriverManager.getConnection(
-                    "jdbc:mysql://localhost/control_de_stock?useTimeZone=true&serverTimeZone=UTC",
+                    "jdbc:mysql://localhost/hotel_administracion?useTimeZone=true&serverTimeZone=UTC",
                     "root", 
                     "5966438012MySQL");
-        System.out.println("Cerrando la conexión, pero que Mina no se cierre!!!!!!!!!");            
+        System.out.println("Cerrando la conexión!!!!!!!!!");            
 
         con.close();            
     }

@@ -6,21 +6,25 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTextField;
 import java.awt.Color;
+
+import com.hotel.jdbc.controller.HuespedesController;
+import com.hotel.jdbc.modelo.Huespedes;
+import com.hotel.jdbc.modelo.Reservas;
+import com.hotel.jdbc.controller.ReservasController;
+
 import com.toedter.calendar.JDateChooser;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import java.awt.SystemColor;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.text.Format;
-import java.awt.event.ActionEvent;
 import java.awt.Toolkit;
 import javax.swing.SwingConstants;
 import javax.swing.JSeparator;
@@ -39,6 +43,10 @@ public class RegistroHuesped extends JFrame {
 	private JLabel labelAtras;
 	int xMouse, yMouse;
 
+	private HuespedesController huespedesController;
+	private ReservasController reservasController;
+	int id;
+
 	/**
 	 * Launch the application.
 	 */
@@ -46,7 +54,7 @@ public class RegistroHuesped extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					RegistroHuesped frame = new RegistroHuesped();
+					RegistroHuesped frame = new RegistroHuesped(0);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -58,8 +66,11 @@ public class RegistroHuesped extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public RegistroHuesped() {
-		
+	public RegistroHuesped(int idReserva) {
+		this.huespedesController=new HuespedesController();
+		this.reservasController=new ReservasController();
+
+
 		setIconImage(Toolkit.getDefaultToolkit().getImage(RegistroHuesped.class.getResource("/imagenes/lOGO-50PX.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 910, 634);
@@ -124,6 +135,8 @@ public class RegistroHuesped extends JFrame {
 		btnAtras.add(labelAtras);
 		
 		
+		//Campos que guardaremos en la base de datos
+
 		txtNombre = new JTextField();
 		txtNombre.setFont(new Font("Roboto", Font.PLAIN, 16));
 		txtNombre.setBounds(560, 135, 285, 33);
@@ -151,8 +164,16 @@ public class RegistroHuesped extends JFrame {
 		txtNacionalidad.setBounds(560, 350, 289, 36);
 		txtNacionalidad.setBackground(SystemColor.text);
 		txtNacionalidad.setFont(new Font("Roboto", Font.PLAIN, 16));
-		txtNacionalidad.setModel(new DefaultComboBoxModel(new String[] {"Afgano-Afgana", "Alemán-Alemana", "Árabe", "Argentino-Argentina", "Australiano-Australiana", "Belga", "Boliviano-Boliviana", "Brasileño-Brasileña", "Camboyano-Camboyana", "Canadiense", "Chileno-Chilena", "Chino-China", "Colombiano-Colombiana", "Coreano-Coreana", "Costarricense", "Cubano-Cubana", "Danés-Danesa", "Dominicano-Dominicana","Ecuatoriano-Ecuatoriana", "Egipcio-Egipcia", "Salvadoreño-Salvadoreña", "Escocés-Escocesa", "Español-Española", "Estadounidense", "Estonio-Estonia", "Etiope", "Filipino-Filipina", "Finlandés-Finlandesa", "Francés-Francesa", "Galés-Galesa", "Griego-Griega", "Guatemalteco-Guatemalteca", "Haitiano-Haitiana", "Holandés-Holandesa", "Hondureño-Hondureña", "Indonés-Indonesa", "Inglés-Inglesa", "Iraquí-Iraquí", "Iraní", "Irlandés-Irlandesa", "Israelí", "Italiano-Italiana", "Japonés-Japonesa", "Jordano-Jordana", "Laosiano-Laosiana", "Letón-Letona", "Letonés-Letonesa", "Malayo-Malaya", "Marroquí-Marroquí", "Mexicano-Mexicana", "Nicaragüense-Nicaragüense", "Noruego-Noruega", "Neozelandés-Neozelandesa", "Panameño-Panameña", "Paraguayo-Paraguaya", "Peruano-Peruana", "Polaco-Polaca", "Portugués-Portuguesa", "Puertorriqueño-Puertorriqueño",  "Rumano-Rumana", "Ruso-Rusa", "Sueco-Sueca", "Suizo-Suiza", "Tailandés-Tailandesa", "Taiwanes-Taiwanesa", "Turco-Turca", "Ucraniano-Ucraniana", "Uruguayo-Uruguaya", "Venezolano-Venezolana", "Vietnamita-Vietnamita"}));
+		txtNacionalidad.setModel(new DefaultComboBoxModel(new String[] {"Seleccione Nacionalidad","Afgano-Afgana", "Alemán-Alemana", "Árabe", "Argentino-Argentina", "Australiano-Australiana", "Belga", "Boliviano-Boliviana", "Brasileño-Brasileña", "Camboyano-Camboyana", "Canadiense", "Chileno-Chilena", "Chino-China", "Colombiano-Colombiana", "Coreano-Coreana", "Costarricense", "Cubano-Cubana", "Danés-Danesa", "Dominicano-Dominicana","Ecuatoriano-Ecuatoriana", "Egipcio-Egipcia", "Salvadoreño-Salvadoreña", "Escocés-Escocesa", "Español-Española", "Estadounidense", "Estonio-Estonia", "Etiope", "Filipino-Filipina", "Finlandés-Finlandesa", "Francés-Francesa", "Galés-Galesa", "Griego-Griega", "Guatemalteco-Guatemalteca", "Haitiano-Haitiana", "Holandés-Holandesa", "Hondureño-Hondureña", "Indonés-Indonesa", "Inglés-Inglesa", "Iraquí-Iraquí", "Iraní", "Irlandés-Irlandesa", "Israelí", "Italiano-Italiana", "Japonés-Japonesa", "Jordano-Jordana", "Laosiano-Laosiana", "Letón-Letona", "Letonés-Letonesa", "Malayo-Malaya", "Marroquí-Marroquí", "Mexicano-Mexicana", "Nicaragüense-Nicaragüense", "Noruego-Noruega", "Neozelandés-Neozelandesa", "Panameño-Panameña", "Paraguayo-Paraguaya", "Peruano-Peruana", "Polaco-Polaca", "Portugués-Portuguesa", "Puertorriqueño-Puertorriqueño",  "Rumano-Rumana", "Ruso-Rusa", "Sueco-Sueca", "Suizo-Suiza", "Tailandés-Tailandesa", "Taiwanes-Taiwanesa", "Turco-Turca", "Ucraniano-Ucraniana", "Uruguayo-Uruguaya", "Venezolano-Venezolana", "Vietnamita-Vietnamita"}));
 		contentPane.add(txtNacionalidad);
+
+		txtTelefono = new JTextField();
+		txtTelefono.setFont(new Font("Roboto", Font.PLAIN, 16));
+		txtTelefono.setBounds(560, 424, 285, 33);
+		txtTelefono.setColumns(10);
+		txtTelefono.setBackground(Color.WHITE);
+		txtTelefono.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		contentPane.add(txtTelefono);
 		
 		JLabel lblNombre = new JLabel("NOMBRE:");
 		lblNombre.setBounds(562, 119, 260, 14);
@@ -184,13 +205,13 @@ public class RegistroHuesped extends JFrame {
 		lblTelefono.setFont(new Font("Roboto Black", Font.PLAIN, 18));
 		contentPane.add(lblTelefono);
 		
-		txtTelefono = new JTextField();
-		txtTelefono.setFont(new Font("Roboto", Font.PLAIN, 16));
-		txtTelefono.setBounds(560, 424, 285, 33);
-		txtTelefono.setColumns(10);
-		txtTelefono.setBackground(Color.WHITE);
-		txtTelefono.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		contentPane.add(txtTelefono);
+		// txtTelefono = new JTextField();
+		// txtTelefono.setFont(new Font("Roboto", Font.PLAIN, 16));
+		// txtTelefono.setBounds(560, 424, 285, 33);
+		// txtTelefono.setColumns(10);
+		// txtTelefono.setBackground(Color.WHITE);
+		// txtTelefono.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		// contentPane.add(txtTelefono);
 		
 		JLabel lblTitulo = new JLabel("REGISTRO HUÉSPED");
 		lblTitulo.setBounds(606, 55, 300, 42);
@@ -210,6 +231,10 @@ public class RegistroHuesped extends JFrame {
 		txtNreserva.setColumns(10);
 		txtNreserva.setBackground(Color.WHITE);
 		txtNreserva.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+
+		String id = String.valueOf(idReserva);//Transformando id de tipo Integer a tipo String
+		txtNreserva.setText(id);
+
 		contentPane.add(txtNreserva);
 		
 		JSeparator separator_1_2 = new JSeparator();
@@ -248,12 +273,30 @@ public class RegistroHuesped extends JFrame {
 		separator_1_2_5.setBackground(new Color(12, 138, 199));
 		contentPane.add(separator_1_2_5);
 		
+		/*	Botón Guardar para la base de datos */
 		JPanel btnguardar = new JPanel();
 		btnguardar.setBounds(723, 560, 122, 35);
 		btnguardar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+
+				if (txtNombre.getText().isEmpty() || txtApellido.getText().isEmpty() || 
+    				txtFechaN.getDate() == null ||txtNacionalidad.getSelectedItem()=="Seleccione Nacionalidad") {
+						
+    JOptionPane.showMessageDialog(null, "Debes llenar todos los campos.");
+				} else {
+    			guardarHuesped();
+}
+				// if (!txtNombre.getText().isEmpty() && !txtApellido.getText().isEmpty() && txtFechaN.getDate().toString() != null && txtNacionalidad.getSelectedItem().toString().isEmpty()) {		
+					
+
+				// 	guardarHuesped();
+				// } else {
+				// 	JOptionPane.showMessageDialog(null, "Debes llenar todos los campos.");
+				// }
 			}
+
+			
 		});
 		btnguardar.setLayout(null);
 		btnguardar.setBackground(new Color(12, 138, 199));
@@ -285,8 +328,7 @@ public class RegistroHuesped extends JFrame {
 		
 
 		final JPanel btnexit = new JPanel();//Se añadio final...btnexit para cerrar la ventana
-		btnexit.setBounds(857, 0, 53, 36);
-		contentPane.add(btnexit);
+		
 		btnexit.addMouseListener(new MouseAdapter() {
 		
 			@Override
@@ -307,15 +349,51 @@ public class RegistroHuesped extends JFrame {
 			}
 		});
 		btnexit.setLayout(null);
+		btnexit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 		btnexit.setBackground(Color.white);
+		btnexit.setBounds(857, 0, 53, 36);
+		//contentPane.add(btnexit);
+		header.add(btnexit);
 		
 		labelExit = new JLabel("X");
 		labelExit.setBounds(0, 0, 53, 36);
 		btnexit.add(labelExit);
 		labelExit.setHorizontalAlignment(SwingConstants.CENTER);
-		labelExit.setForeground(SystemColor.black);
+		//labelExit.setForeground(SystemColor.black);
 		labelExit.setFont(new Font("Roboto", Font.PLAIN, 18));
+
+
+
+		
+
+		
 	}
+
+	private void guardarHuesped() {
+
+		String fechaN=((JTextField)txtFechaN.getDateEditor().getUiComponent()).getText();
+		String nacionalidad=(String)txtNacionalidad.getSelectedItem();
+		//Integer celular= Integer.parseInt(txtTelefono.getText());
+
+		Huespedes nuevoHuesped= new Huespedes(txtNombre.getText(), txtApellido.getText(),java.sql.Date.valueOf(fechaN),
+											  nacionalidad,txtTelefono.getText());
+
+		
+
+		//var numeroReserva = txtNreserva.getText();
+		int idReservas=Integer.parseInt(txtNreserva.getText());
+
+		System.out.println("HABER QUE IMPRIME ESTO QUE VA!!!!!!!!!!!!!!"+idReservas);
+
+		this.huespedesController.guardar(nuevoHuesped,idReservas);   
+		JOptionPane.showMessageDialog(contentPane,"Huesped  guardado con éxito, ID : "+ nuevoHuesped.getId());
+		
+		MenuUsuario menuUsuario= new MenuUsuario();
+		menuUsuario.setVisible(true); 
+		dispose();
+	}
+
+	
 	
 	
 	//Código que permite mover la ventana por la pantalla según la posición de "x" y "y"	
